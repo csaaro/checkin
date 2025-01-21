@@ -1,58 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
+import { useNavigate } from 'react-router-dom';
+import { useScanContext } from '../context/ScanContext';
 
 export default function QRScanner() {
-  const [qrContent, setQrContent] = useState(''); // QR-Inhalt
-  const [error, setError] = useState(''); // Fehleranzeige
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { setScanData } = useScanContext(); // Zugriff auf den Kontext
+
+  const successScan = async (decodedText) => {
+    setLoading(true);
+    try {
+      setScanData(decodedText);
+      navigate('/checkin/success'); // Navigiert zur Erfolgsseite
+    } catch (err) {
+      toast.error("Invalid BIBO QR Code. Please try again.");
+    }
+  };
 
   useEffect(() => {
-    const qrScanner = new Html5Qrcode("reader");
+    const qrScanner = new Html5Qrcode('reader');
 
     const startScanner = async () => {
       try {
         await qrScanner.start(
-          { facingMode: "environment" }, // Kamera-Modus
+          { facingMode: 'environment' },
           { fps: 10, qrbox: 250 },
-          (decodedText) => {
-            setQrContent(decodedText); // QR-Inhalt setzen
-            qrScanner.stop(); // Scanner stoppen
-          },
+          successScan,
+          // (decodedText) => {
+          //   qrScanner.stop();
+          //   successScan(decodedText)
+          //   console.log('*************** erfolg dann navigate');
+          // },
           (errorMessage) => {
-            console.error(errorMessage); // Fehler in der Konsole
+            console.error('Fehler beim Scannen:', errorMessage);
           }
         );
       } catch (err) {
-        setError("QR-Code-Scanner konnte nicht gestartet werden.");
+        console.error('Scanner konnte nicht gestartet werden:', err);
       }
     };
 
-    startScanner();
+    if (!loading) startScanner();
 
-    return () => qrScanner.stop(); // Aufräumen beim Verlassen
-  }, []);
+    return () => {
+      if (qrScanner && qrScanner.isScanning) {
+        qrScanner.stop();
+      }
+    };
+  }, [navigate, setScanData, loading]);
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div>
       <div
         id="reader"
         style={{
           width: '300px',
           height: '300px',
           border: '2px dashed #0070f3',
-          margin: '20px auto',
           borderRadius: '8px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          margin: '20px auto',
           backgroundColor: '#fff',
         }}
       >
         Kamera wird geladen...
       </div>
-      <div>
-        {qrContent ? <p>QR-Inhalt: {qrContent}</p> : <p>Bitte scannen Sie einen QR-Code.</p>}
-      </div>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }

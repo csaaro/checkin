@@ -9,7 +9,7 @@ export default function App() {
     <ScanProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/checkin" element={<QRScanner />} />
+          <Route path="/checkin/scanner" element={<QRScanner />} />
           <Route path="/checkin/success" element={<Success />} />
         </Routes>
       </BrowserRouter>

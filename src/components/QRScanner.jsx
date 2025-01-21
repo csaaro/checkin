@@ -27,11 +27,6 @@ export default function QRScanner() {
           { facingMode: 'environment' },
           { fps: 10, qrbox: 250 },
           successScan,
-          // (decodedText) => {
-          //   qrScanner.stop();
-          //   successScan(decodedText)
-          //   console.log('*************** erfolg dann navigate');
-          // },
           (errorMessage) => {
             console.error('Fehler beim Scannen:', errorMessage);
           }

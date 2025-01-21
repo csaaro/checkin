@@ -1,15 +1,79 @@
 ---
-import App from '../components/App.jsx'; // Die zentrale App mit BrowserRouter und React Router
-import PWAInstaller from '../components/PWAInstaller.astro';
+import PWAInstaller from '../components/PWAInstaller.astro'; // PWA-Installer-Komponente
 ---
 
 <html>
   <head>
-    <title>QR-Code App</title>
+    <title>Willkommen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f9f9f9;
+      }
+
+      .welcome-container {
+        text-align: center;
+        padding: 20px;
+        margin-top: 50px;
+      }
+
+      .welcome-container h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .welcome-container p {
+        font-size: 16px;
+        color: #555;
+      }
+
+      .start-button {
+        background-color: #1e88e5;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-top: 20px;
+        text-decoration: none;
+      }
+
+      .start-button:hover {
+        background-color: #1565c0;
+      }
+
+      footer {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+      }
+    </style>
   </head>
   <body>
-    <PWAInstaller/>
-    <App client:only="react" /> <!-- Nur React-Komponenten werden gerendert -->
+    <!-- Willkommen Nachricht -->
+    <div class="welcome-container">
+      <h1>Willkommen zur Check-In App</h1>
+      <p>Diese App hilft Ihnen beim schnellen und einfachen Check-In.</p>
+      <!-- Button zur Scanner-Seite -->
+      <a href="/checkin/scanner" class="start-button">Check-In starten</a>
+    </div>
+
+    <!-- Footer mit PWA-Installer -->
+    <footer>
+      <PWAInstaller />
+    </footer>
   </body>
 </html>

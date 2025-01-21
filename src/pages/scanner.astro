@@ -1,0 +1,15 @@
+---
+import App from '../components/App.jsx'; // Die zentrale App mit BrowserRouter und React Router
+import PWAInstaller from '../components/PWAInstaller.astro';
+---
+
+<html>
+  <head>
+    <title>QR-Code App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <PWAInstaller/>
+    <App client:only="react" /> <!-- Nur React-Komponenten werden gerendert -->
+  </body>
+</html>

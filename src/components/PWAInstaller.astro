@@ -1,0 +1,115 @@
+---
+---
+<footer id="installFooter" class="hidden">
+    <style>
+       footer {
+        position: fixed;
+        bottom: 0; /* Immer unten fixiert */
+        left: 0; /* Ganz links */
+        width: 100%; /* Breite über den gesamten Bildschirm */
+        background-color: red;
+        color: white;
+        text-align: center;
+        padding: 10px 20px;
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2); /* Schatten nach oben */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      button {
+        width: 100%;
+        max-width: 300px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background-color: darkred;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: crimson;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      footer.hidden {
+        display: none;
+      }
+    </style>
+  
+    <button id="installBtn">App installieren</button>
+  
+    <script>
+      interface BeforeInstallPromptEvent extends Event {
+        prompt: () => Promise<void>;
+        userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+      }
+  
+            // Erweiterung des Navigator-Interfaces, um "standalone" hinzuzufügen
+      declare global {
+        interface Navigator {
+          standalone?: boolean;
+        }
+      }
+      let deferredPrompt: BeforeInstallPromptEvent | null = null;
+  
+      const footer = document.getElementById('installFooter') as HTMLElement;
+      const installBtn = document.getElementById('installBtn') as HTMLButtonElement;
+      document.addEventListener('DOMContentLoaded', () => {
+      })
+  
+      // Auf das `beforeinstallprompt`-Event hören
+      document.addEventListener('DOMContentLoaded', () => {
+        // `beforeinstallprompt`-Event abfangen
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault(); // Standardaufforderung blockieren
+          deferredPrompt = e as (Event & {
+            prompt: () => Promise<void>;
+            userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+          }); // Typcasting für e
+
+          // Footer anzeigen
+          footer.classList.remove('hidden');
+
+          installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+
+            // Installationsaufforderung anzeigen
+            await deferredPrompt.prompt();
+
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+              console.log('App wurde installiert.');
+            } else {
+              console.log('App-Installation abgelehnt.');
+            }
+
+            // Prompt zurücksetzen und Footer ausblenden
+            deferredPrompt = null;
+            footer.classList.add('hidden');
+          });
+        });
+
+        // Sobald die App installiert ist
+        window.addEventListener('appinstalled', () => {
+          console.log('App erfolgreich installiert.');
+          footer.classList.add('hidden'); // Footer ausblenden
+        });
+
+        // Überprüfen, ob die App als PWA läuft
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+          footer.classList.add('hidden'); // Footer ausblenden
+        }
+      });
+    </script>
+  </footer>

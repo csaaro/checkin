@@ -9,6 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.1.8"
+    "@astrojs/react": "^4.1.6",
+    "astro": "^5.1.8",
+    "html5-qrcode": "^2.3.8",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@vite-pwa/astro": "^0.5.0"
   }
 }

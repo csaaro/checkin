@@ -1,5 +1,24 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "types": [
+      "astro/client",
+      "vite-plugin-pwa/vanillajs",
+      "vite-plugin-pwa/info"
+    ],
+    "jsx": "react-jsx",                  // JSX wird von React verarbeitet
+    "strict": true,                     // Aktiviert strikte Typprüfung
+    "target": "ESNext",                 // Moderne JavaScript-Version
+    "module": "ESNext",                 // ES-Modul-System
+    "moduleResolution": "Node",         // Modulauflösung wie in Node.js
+    "baseUrl": ".",                     // Basisverzeichnis für relative Imports
+    "paths": {
+      "@/*": ["src/*"]                  // Alias für einfache Imports (z. B. @/components)
+    },
+    "esModuleInterop": true,            // Interop zwischen CommonJS und ESModulen
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true                // Bibliothekstypen nicht prüfen (Performance-Optimierung)
+  },
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "node_modules"]
 }
